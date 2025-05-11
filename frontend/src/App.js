@@ -1,25 +1,30 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";  // Use Routes instead of Switch
+import HomePage from "./pages/HomePage";
+import ProductListingPage from "./pages/ProductListingPage";
 
 function App() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/products")
+    fetch("/api/products")
       .then((res) => res.json())
       .then((data) => setProducts(data));
   }, []);
 
   return (
-    <div style={{ padding: "2rem" }}>
-      <h1>Product List</h1>
-      <ul>
-        {products.map((p) => (
-          <li key={p.id}>
-            {p.name} - ${p.price}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <Router>
+      <Routes>  {/* Use Routes instead of Switch */}
+        {/* Home Page Route */}
+        <Route exact path="/" element={<HomePage />} />
+        
+        {/* Product Listing Page Route */}
+        <Route
+          path="/products"
+          element={<ProductListingPage products={products} />}
+        />
+      </Routes>
+    </Router>
   );
 }
 
